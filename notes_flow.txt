@@ -1,0 +1,32 @@
+teams selected ->
+Go to game screen
+TITLE GOES BY "TEAM 1 VS TEAM 2" ROUND 1 points
+
+YOUR COLOR "RED"
+
+***
+THEN MEMORIZE THE COLORS
+
+DRAW
+
+TIMER
+
+SUBMIT (10+ points for early submit if win)
+
+WAITING FOR TEAM 22
+
+SHOWS ALL VS ORIGINAL in scroll box with CALCULATING.. at the top THEN
+TEAM _ WINS! 98% +100 points
+TEAM _ is in the lead
+
+TO THE RIGHT OF VS RED % BLUE % TOTAL %
+
+AT bottom, scoreboard:
+Team 1 500pts
+Team 2 100pts
+
+TIMER to next round and [ ] READY FOR NEXT ROUND (checkbox bottom right?)
+
+when all players ready up back to ***
+
+

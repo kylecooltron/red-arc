@@ -58,15 +58,18 @@
 
             <DrawingGameTimer v-if="!gameData?.gameOver" :duration="7"></DrawingGameTimer>
         </div>
+
+        <ConfettiEffect v-if="gameData?.gameOver && gameData.isPlayerTeamWinning()"></ConfettiEffect>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 import DrawingGameGrid from './DrawingGameGrid.vue';
 import DrawingGameTimer from './DrawingGameTimer.vue';
+import ConfettiEffect from '../ConfettiEffect.vue';
 
 export default {
-    components: {DrawingGameGrid, DrawingGameTimer},
+    components: {DrawingGameGrid, DrawingGameTimer, ConfettiEffect},
     computed: {
       ...mapGetters(['gameData', 'connection']),
     },

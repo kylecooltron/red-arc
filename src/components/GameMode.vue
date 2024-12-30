@@ -37,6 +37,11 @@ export default {
             );
         }
     },
+    mounted() {
+        if(this.gameData != undefined){
+            this.selectedMode = this.gameData.gameMode;
+        }
+    }
 }
 </script>
 

@@ -2,24 +2,30 @@
   <div class="content">
     <div class="top-section">
         <div class="title">{{ gameName }}</div>
+    </div>
+    <div class="game-options-grid">
         <RoomCode :roomCode="gameData?.roomCode ?? 'Loading...'"></RoomCode>
         <GameMode></GameMode>
+        <DrawingGameOptions></DrawingGameOptions>
     </div>
 
-    <!-- Non-Teams -->
-    <PlayerList
-      v-if="!gameData?.teams"
-      :playerList="gameData?.playerList"
-    ></PlayerList>
+    <div v-if="gameData?.gameMode == 'Teams'">
+      <!-- Teams -->
+      <PlayerList
+        v-for="(playerIds, team) in gameData?.teams"
+        :key="team"
+        :playerList="gameData?.getPlayersFromIdList(playerIds)"
+        :title="team"
+      ></PlayerList>
+    </div>
 
-    <!-- Teams -->
-    <PlayerList
-      v-for="(playerIds, team) in (gameData?.teams || {})"
-      :key="team"
-      :playerList="gameData?.getPlayersFromIdList(playerIds)"
-      :title="team"
-    ></PlayerList>
-
+    <div v-else>
+      <!-- Non-Teams -->
+      <PlayerList
+        :playerList="gameData?.playerList"
+      ></PlayerList>
+    </div>
+    
     <button v-if="gameData?.player.isHost" class="base-button important-button-colors vertical-small-margin" v-on:click="startGame()">Start Game</button>
     <div class="vertical-small-margin" v-else>Waiting for host to start the game.</div>
   </div>
@@ -27,12 +33,13 @@
 
 <script>
 import GameMode from '@/components/GameMode.vue';
+import DrawingGameOptions from '@/components/Games/DrawingGame/DrawingGameOptions.vue';
 import PlayerList from '@/components/PlayerList.vue';
 import RoomCode from '@/components/RoomCode.vue';
 import { mapActions, mapGetters } from 'vuex';
 
 export default {
-    components: { PlayerList, RoomCode, GameMode },
+    components: { PlayerList, RoomCode, GameMode, DrawingGameOptions },
     computed: {
       ...mapGetters(['gameName', 'connectionRequestData', 'connection', 'gameData']),
     },
@@ -74,4 +81,29 @@ export default {
 {
   margin: 2em 0;
 }
+.game-options-grid{
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  gap: 0 1em;
+  width: fit-content;
+}
+.game-options-grid .nice-box {
+  margin-top: 0;
+}
+
+
+@media only screen and (max-width: 800px) {
+  .game-options-grid{
+    grid-template-columns: auto auto auto;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .game-options-grid{
+    grid-template-columns: auto;
+  }
+}
+
+
+
 </style>

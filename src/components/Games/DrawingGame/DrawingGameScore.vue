@@ -1,75 +1,25 @@
 <template>
         <div class="game-middle">
-
-            <div 
-                v-if="gameData?.gameOver && gameData.gameMode != 'Teams'" 
-                class="heading">
-                Game Over
-            </div>
-            <div 
-                v-if="gameData?.gameOver && gameData.gameMode == 'Teams'" 
-                :class="gameData.isPlayerTeamWinning() ? ' winner-title' : 'heading'"
-                >
-                {{gameData.isPlayerTeamWinning() ? '🎉' : ''}}Your Team {{ gameData.isPlayerTeamWinning() ? 'Won!' : 'Lost' }}
-            </div>
-
-            <div 
-            v-if="!gameData?.gameOver && gameData.gameMode != 'Teams'" 
-            class="heading">
-                Round {{gameData?.round}} Results
-            </div>
-            <div 
-                v-if="!gameData?.gameOver && gameData.gameMode == 'Teams'" 
-                class="heading">
-                Round {{ gameData.isPlayerTeamWinningRound() ? 'Victory!' : 'Lost' }}
-            </div>
-
-            <div class="score-grid-container">
-                <div 
-                    v-for="(teamScoreData, teamName) in gameData?.teamScores" 
-                    :key="teamName" 
-                    class="team-section"
-                    :style="teamName == gameData.getTeam() ? 'border: 1px solid ' + (gameData.shouldCelebrate() ? 'lime;' : 'red;') : ''"
-                >
-                    <div v-if="gameData.gameMode=='Teams'" class="heading">
-                        {{teamName == gameData.winningRoundTeam() && !gameData.gameOver ? '🎉' : ''}}Team {{ teamName }}
-                    </div>
-                    <div class="drawing-grid-container">
-                        <div>
-                            <div class="grid-subtitles">Original</div>
-                            <DrawingGameGrid :grid="gameData?.truthGrid" :size="24"></DrawingGameGrid>
-                        </div>
-                        <div>
-                            <div class="grid-subtitles">Submitted</div>
-                            <DrawingGameGrid :grid="teamScoreData.attemptGrid" :size="24"></DrawingGameGrid>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="grid-subtitles">Round Accuracy {{ teamScoreData.roundScore }}%</div>
-                        <div class="heading" style="margin-top: 0.3em;">Score {{ teamScoreData.score }}</div>
-                    </div>
-                </div>
-            </div>
-
+            <DrawingGameTeamScoreDetails v-if="gameData?.gameMode == 'Teams'"></DrawingGameTeamScoreDetails>
+            <DrawingGameScoreDetails v-else></DrawingGameScoreDetails>
             <div class="host-options-button-box" v-if="gameData?.gameOver && gameData?.player.isHost">
                 <button  class="base-button important-button-colors" v-on:click="playAgain()">Play Again</button>
                 <button  class="base-button" v-on:click="backToWaitingRoom()">Change Game Settings</button>
             </div>
-
             <DrawingGameTimer v-if="!gameData?.gameOver" :duration="7"></DrawingGameTimer>
         </div>
-
-        <ConfettiEffect v-if="gameData?.gameOver && gameData.isPlayerTeamWinning()"></ConfettiEffect>
+        <ConfettiEffect v-if="gameData?.wonGame(gameData.getTeam())"></ConfettiEffect>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
-import DrawingGameGrid from './DrawingGameGrid.vue';
 import DrawingGameTimer from './DrawingGameTimer.vue';
 import ConfettiEffect from '../ConfettiEffect.vue';
+import DrawingGameScoreDetails from './DrawingGameScoreDetails.vue';
+import DrawingGameTeamScoreDetails from './DrawingGameTeamScoreDetails.vue';
 
 export default {
-    components: {DrawingGameGrid, DrawingGameTimer, ConfettiEffect},
+    components: {DrawingGameTimer, ConfettiEffect, DrawingGameScoreDetails, DrawingGameTeamScoreDetails},
     computed: {
       ...mapGetters(['gameData', 'connection']),
     },
@@ -120,14 +70,12 @@ export default {
 
 .team-section
 {
-    
-
     width: fit-content;
     justify-self: center;
-    margin: 0.5em 0.5em 1em 0.5em;
+    margin: 0.4em 0.4em 1em 0.4em;
 
     background-color: rgb(34, 22, 19);
-    padding: 0.5em 1em 0.8em 1em;
+    padding: 0.2em 0.5em 0.5em 0.5em;
     border-radius: 10px;
 }
 

@@ -30,7 +30,8 @@ export default {
     props: {
         playerList: {
             type: Array,
-            required: true
+            required: true,
+            default: () => []
         },
         title: String
     },

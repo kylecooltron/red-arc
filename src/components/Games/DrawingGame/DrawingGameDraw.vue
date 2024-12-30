@@ -11,10 +11,10 @@
                 v-on:click="toolClicked(index)">
             </div>
             <div class="drawing-grid-container">
-                <DrawingGameGrid :grid="gameData?.getPlayerGrid()" :tileClicked="tileClicked" :size="80"></DrawingGameGrid>
+                <DrawingGameGrid :grid="gameData?.getPlayerGrid()" :tileClicked="tileClicked" :size="gameData?.tileSize"></DrawingGameGrid>
             </div>
         </div>
-        <DrawingGameTimer :duration="8"></DrawingGameTimer>
+        <DrawingGameTimer :duration="gameData.secondsLeft"></DrawingGameTimer>
     </div>
 </template>
 
@@ -27,12 +27,6 @@ export default {
     components: {DrawingGameGrid, DrawingGameTimer},
     computed: {
       ...mapGetters(['gameData', 'connection']),
-    },
-    data() {
-        return {
-        timeRemaining: 8,
-        timer: null,
-        };
     },
     methods: {
         ...mapActions(['setGameState']),
@@ -50,24 +44,7 @@ export default {
                 {team: this.gameData.getTeam(), tileIndex: index, color: this.gameData.getToolColor()}
             );
         },
-        startTimer() {
-        this.timer = setInterval(() => {
-            if (this.timeRemaining > 0) {
-                this.timeRemaining--;
-                } else {
-                clearInterval(this.timer);
-                }
-            }, 1000);
-        },
-    },
-    mounted() {
-        this.startTimer();
-    },
-    beforeUnmount() {
-        if (this.timer) {
-        clearInterval(this.timer);
-        }
-    },
+    }
 }
 </script>
 

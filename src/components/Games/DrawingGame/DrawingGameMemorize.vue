@@ -3,10 +3,10 @@
         <div>
             <div class="heading anim-slide-rock">Memorize Your Color</div>
             <div class="drawing-grid-container">
-                <DrawingGameGrid :grid="gameData?.truthGrid" :size="80"></DrawingGameGrid>
+                <DrawingGameGrid :grid="gameData?.truthGrid" :size="gameData?.tileSize"></DrawingGameGrid>
             </div>
         </div>
-        <DrawingGameTimer :duration="5"></DrawingGameTimer>
+        <DrawingGameTimer :duration="gameData.secondsLeft"></DrawingGameTimer>
     </div>
     
 </template>

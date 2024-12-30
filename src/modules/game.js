@@ -53,6 +53,11 @@ export default class Game {
             )
         );
         this.playerList = this.getPlayerList();
+        if (this.gameMode != 'Teams') {
+            this.teams = {
+                0: this.playerList.map(player => player.id)
+            };
+        }
     }
 
     updateTeams(data) {
@@ -60,7 +65,9 @@ export default class Game {
             this.teams = data;
             return;
         }
-        this.teams = null;
+        this.teams = {
+            0: this.playerList.map(player => player.id)
+        };
     }
 
     updateGameStarted(started) {

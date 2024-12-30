@@ -15,50 +15,29 @@ export default class DrawingGame extends Game {
         this.truthGrid = null;
         this.teamScores = null;
         this.round = 0;
+        this.maxRounds = data.initData.maxRounds;
+        this.difficulty = data.initData.difficulty;
         this.gameOver = false;
+        this.secondsLeft = 0;
+        this.tileSize = 80;
 
         this.updateMethods = this.updateMethods | {
             "ChangeState": this.changeState.bind(this),
         }
     }
 
-    winningTeam() {
-        return Object.entries(this.teamScores).reduce(
-            (maxTeam, [key, value]) => {
-                if (value.score > maxTeam.score) {
-                    return { team: key, score: value.score };
-                }
-                return maxTeam;
-            },
-            { team: null, score: -Infinity }
-        ).team;
-    }
-
-    isPlayerTeamWinning() {
-        return this.getTeam() == this.winningTeam();
-    }
-
-    winningRoundTeam() {
-        return Object.entries(this.teamScores).reduce(
-            (maxTeam, [key, value]) => {
-                if (value.roundScore > maxTeam.roundScore) {
-                    return { team: key, roundScore: value.roundScore };
-                }
-                return maxTeam;
-            },
-            { team: null, roundScore: -Infinity }
-        ).team;
-    }
-
-    isPlayerTeamWinningRound() {
-        return this.getTeam() == this.winningRoundTeam();
-    }
-
-    shouldCelebrate() {
-        if (this.gameOver) {
-            return this.isPlayerTeamWinning();
+    shouldCelebrate(teamId) {
+        if (this.teamScores[teamId] == undefined) {
+            return false;
         }
-        return this.isPlayerTeamWinningRound();
+        return ['RoundWon', 'GameWon', 'PerfectGame', 'PerfectRound'].includes(this.teamScores[teamId].winState);
+    }
+
+    wonGame(teamId) {
+        if (this.teamScores[teamId] == undefined) {
+            return false;
+        }
+        return ['GameWon', 'PerfectGame'].includes(this.teamScores[teamId].winState);
     }
 
     getEraser() {
@@ -101,11 +80,15 @@ export default class DrawingGame extends Game {
             this.round = data.round;
             this.updateTools();
         }
+        if (this.state == 2 || this.state == 3) {
+            this.secondsLeft = data.seconds;
+        }
         if (this.state == 4) {
-            console.log(data);
             Object.entries(data.scoresUpdate).forEach(([key, value]) => {
                 this.teamScores[key].score = value.score;
                 this.teamScores[key].roundScore = value.roundScore;
+                this.teamScores[key].colorAccuracies = value.colorAccuracies;
+                this.teamScores[key].winState = value.winState;
             });
             this.gameOver = data.gameOver;
         }
@@ -119,6 +102,8 @@ export default class DrawingGame extends Game {
                         score: value.score,
                         roundScore: value.roundScore,
                         attemptGrid: new DrawingGameColorGrid(value.attemptGrid.grid),
+                        colorAccuracies: value.colorAccuracies,
+                        winState: value.winState,
                     }
                 ]
             )
@@ -132,6 +117,20 @@ export default class DrawingGame extends Game {
     playerMove(data) {
         if (data.type == "TileClicked") {
             this.teamScores[data.team].attemptGrid.getList()[data.tileIndex].color = data.color;
+        }
+    }
+
+    updateTileSize() {
+        switch (this.difficulty) {
+            case "Easy":
+                this.tileSize = 80;
+                break;
+            case "Medium":
+                this.tileSize = 70;
+                break;
+            case "Hard":
+                this.tileSize = 60;
+                break;
         }
     }
 
@@ -149,6 +148,13 @@ export default class DrawingGame extends Game {
                 return true;
             case "PlayerMove":
                 this.playerMove(data);
+                return true;
+            case "MaxRounds":
+                this.maxRounds = data;
+                return true;
+            case "Difficulty":
+                this.difficulty = data;
+                this.updateTileSize();
                 return true;
         }
         return false;

@@ -44,7 +44,7 @@ export default {
       ...mapGetters(['gameName', 'connectionRequestData', 'connection', 'gameData']),
     },
     methods: {
-      ...mapActions(['initConnection', 'initGameData']),
+      ...mapActions(['initConnection', 'initGameData', 'disconnectOnFailedGameJoin']),
       async init(){
         if(this.connection != null){
           // Already connected
@@ -56,7 +56,8 @@ export default {
         }
         await this.initConnection();
         this.connection.invoke(...this.connectionRequestData.get())
-            .then(this.initGameData);
+            .then(this.initGameData)
+            .catch(this.disconnectOnFailedGameJoin);
       },
       startGame(){
         if(this.gameData?.roomCode == null){

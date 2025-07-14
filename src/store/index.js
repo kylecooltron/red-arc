@@ -2,6 +2,7 @@ import GameFactory from '@/modules/gamefactory';
 import { createStore } from 'vuex';
 import * as signalR from '@microsoft/signalr';
 import ConnectionRequestData from '@/modules/connection';
+import router from '@/router';
 
 const hubUrl = `${process.env.VUE_APP_API_URL}/GameHub`;
 
@@ -26,6 +27,18 @@ const store = createStore({
         updateGameDataState(state, update) {
             try {
                 console.log(`received ${update.type}`);
+                if (update.type == "GameEnded")
+                {
+                    // disconnect
+                    state.connection.stop();
+                    state.gameData = null;
+                    state.gameName = null;
+                    state.connection = null;
+                    state.connectionRequestData = null;
+                    alert('One or more players disconnected!');
+                    router.push(`/game-list`);
+                    return;
+                }
                 const processed = state.gameData.update(update.type, update.data);
                 if (!processed) {
                     throw Error(`Update type ${update.type} not implemented. Data was: ${update.data}`);
@@ -39,6 +52,16 @@ const store = createStore({
         },
         setConnection(state, connection) {
             state.connection = connection;
+        },
+        disconnect(state)
+        {
+            // disconnect
+            state.connection.stop();
+            state.gameData = null;
+            state.gameName = null;
+            state.connection = null;
+            state.connectionRequestData = null;
+            router.push(`/game-list`);
         }
     },
     actions: {
@@ -66,6 +89,10 @@ const store = createStore({
         },
         initGameData({ commit }, payload) {
             commit('initGameDataState', payload);
+        },
+        disconnectOnFailedGameJoin({ commit }){
+            commit('disconnect');
+            alert('No game found!');
         },
         setConnectionRequestData({ commit, state }, payload) {
             if (!state.gameName) {

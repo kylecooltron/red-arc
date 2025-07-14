@@ -51,7 +51,7 @@ export default {
           return;
         }
         if(this.connectionRequestData == null){
-          this.$router.push(`/game-list`);
+          this.$router.push(`/red-arc/game-list`);
           throw Error("Connection request info missing. Redirected to home page.");
         }
         await this.initConnection();

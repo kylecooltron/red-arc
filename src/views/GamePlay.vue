@@ -29,7 +29,7 @@ export default {
                 this.currentComponent = 'DrawingGame';
                 break;
             default:
-                this.$router.push(`/game-list`);
+                this.$router.push(`/red-arc/game-list`);
                 // throw Error(`No game component found for game name: ${this.gameName}`);
         }
     }

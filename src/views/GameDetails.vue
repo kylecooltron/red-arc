@@ -42,7 +42,7 @@ export default {
     },
     mounted(){
         if(this.gameName == null){
-            this.$router.push('/game-list');
+            this.$router.push('/red-arc/game-list');
         }
     },
 }

@@ -45,7 +45,7 @@ export default {
         ...mapActions(['setGameName']),
         gameClicked(gameName){
             this.setGameName(gameName);
-            this.$router.push(`/game-details`);
+            this.$router.push(`/red-arc/game-details`);
         }
     }
 }

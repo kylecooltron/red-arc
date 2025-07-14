@@ -36,7 +36,7 @@ const store = createStore({
                     state.connection = null;
                     state.connectionRequestData = null;
                     alert('One or more players disconnected!');
-                    router.push(`/game-list`);
+                    router.push(`/red-arc/game-list`);
                     return;
                 }
                 const processed = state.gameData.update(update.type, update.data);
@@ -61,7 +61,7 @@ const store = createStore({
             state.gameName = null;
             state.connection = null;
             state.connectionRequestData = null;
-            router.push(`/game-list`);
+            router.push(`/red-arc/game-list`);
         }
     },
     actions: {

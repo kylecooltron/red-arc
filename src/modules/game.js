@@ -74,7 +74,7 @@ export default class Game {
         console.log('started: ' + started);
         if (started && this.gameStarted != started) {
             this.gameStarted = started;
-            router.push(`/game-play`);
+            router.push(`/red-arc/game-play`);
             return;
         }
 
@@ -98,7 +98,7 @@ export default class Game {
                 this.updateGameMode(data);
                 return true;
             case "BackToWaitingRoom":
-                router.push(`/waiting-room`);
+                router.push(`/red-arc/waiting-room`);
                 return true;
         }
         return false;

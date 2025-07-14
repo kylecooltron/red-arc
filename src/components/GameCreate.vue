@@ -42,7 +42,7 @@ export default {
                     name: this.playerName,
                 }
             );
-            this.$router.push(`/waiting-room`);
+            this.$router.push(`/red-arc/waiting-room`);
         }
     }
 }

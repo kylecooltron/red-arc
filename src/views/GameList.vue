@@ -53,7 +53,6 @@ export default {
     },
     mounted(){
          if(this.connection != null){
-            this.$router.push('/game-list');
             this.disconnectOnFailedGameJoin();
             return;
         }

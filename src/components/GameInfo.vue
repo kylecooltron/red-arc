@@ -1,12 +1,41 @@
 <template>
     <div id="game-info-flexbox">
-        <img src="@/assets/game-1.png" alt="Game Screenshot">
-        <p>
-            Some stuff about this game. This is a test game. It is not real! Yippee, so much fun to play a game that 
-            isn't even real. Right? Yeah, good ol' gaming. That's what we're about.
-        </p>
+        <img :src="currentImage" alt="Game Screenshot">
+        <p>{{currentDescription}}</p>
     </div>
 </template>
+
+<script>
+import { mapGetters } from 'vuex';
+
+export default {
+    data() {
+        return {
+            currentImage: null,
+            currentDescription: "loading...",
+        };
+    },
+    computed: {
+        ...mapGetters(['gameName']),
+    },
+    mounted(){
+        switch (this.gameName) {
+            case 'Drawing Game':
+                this.currentImage = require('@/assets/game-1.png');
+                this.currentDescription = `Some stuff about this game. This is a test game. It is not real! Yippee, so much fun to play a game that 
+                    isn't even real. Right? Yeah, good ol' gaming. That's what we're about.`
+                break;
+            case 'Madlib Game':
+                this.currentImage = require('@/assets/game-2.png');
+                this.currentDescription = `Add words to the pot and then try to remember which ones are assigned to you to retell the story.`
+                break;
+            default:
+                this.$router.push(`/game-list`);
+                // throw Error(`No game component found for game name: ${this.gameName}`);
+        }
+    }
+}
+</script>
 
 <style>
 #game-info-flexbox {

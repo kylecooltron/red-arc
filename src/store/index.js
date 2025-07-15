@@ -95,7 +95,6 @@ const store = createStore({
         },
         disconnectOnFailedGameJoin({ commit }){
             commit('disconnect');
-            alert('No game found!');
         },
         setConnectionRequestData({ commit, state }, payload) {
             if (!state.gameName) {

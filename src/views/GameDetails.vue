@@ -45,6 +45,7 @@ export default {
         if(this.gameName == null || this.connection != null){
             this.$router.push('/game-list');
             this.disconnectOnFailedGameJoin();
+            alert('No game found!');
             return;
         }
     },

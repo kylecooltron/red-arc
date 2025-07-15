@@ -49,6 +49,7 @@ export default {
       disconnectAndBackToList(){
         router.push(`/game-list`);
         this.disconnectOnFailedGameJoin();
+        alert('No game found!');
       },
       async init(){
         if(this.connection != null){

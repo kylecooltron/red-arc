@@ -10,11 +10,12 @@
 
 <script>
 import DrawingGame from '@/components/Games/DrawingGame/DrawingGame.vue';
+import MadlibGame from '@/components/Games/MadlibGame/MadlibGame.vue';
 import PlayerDock from '@/components/PlayerDock.vue';
 import { mapGetters } from 'vuex';
 
 export default {
-    components: { PlayerDock, DrawingGame },
+    components: { PlayerDock, DrawingGame, MadlibGame },
     data() {
         return {
             currentComponent: null
@@ -28,8 +29,11 @@ export default {
             case 'Drawing Game':
                 this.currentComponent = 'DrawingGame';
                 break;
+            case 'Madlib Game':
+                this.currentComponent = 'MadlibGame';
+                break;
             default:
-                this.$router.push(`/red-arc/game-list`);
+                this.$router.push(`/game-list`);
                 // throw Error(`No game component found for game name: ${this.gameName}`);
         }
     }

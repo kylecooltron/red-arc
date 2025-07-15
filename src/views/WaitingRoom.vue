@@ -6,7 +6,7 @@
     <div class="game-options-grid">
         <RoomCode :roomCode="gameData?.roomCode ?? 'Loading...'"></RoomCode>
         <GameMode></GameMode>
-        <DrawingGameOptions></DrawingGameOptions>
+        <DrawingGameOptions v-if="gameName == 'Drawing Game'"></DrawingGameOptions>
     </div>
 
     <div v-if="gameData?.gameMode == 'Teams'">
@@ -37,6 +37,7 @@ import DrawingGameOptions from '@/components/Games/DrawingGame/DrawingGameOption
 import PlayerList from '@/components/PlayerList.vue';
 import RoomCode from '@/components/RoomCode.vue';
 import { mapActions, mapGetters } from 'vuex';
+import router from '@/router';
 
 export default {
     components: { PlayerList, RoomCode, GameMode, DrawingGameOptions },
@@ -45,30 +46,38 @@ export default {
     },
     methods: {
       ...mapActions(['initConnection', 'initGameData', 'disconnectOnFailedGameJoin']),
+      disconnectAndBackToList(){
+        router.push(`/game-list`);
+        this.disconnectOnFailedGameJoin();
+      },
       async init(){
         if(this.connection != null){
           // Already connected
           return;
         }
         if(this.connectionRequestData == null){
-          this.$router.push(`/red-arc/game-list`);
+          this.$router.push(`/game-list`);
           throw Error("Connection request info missing. Redirected to home page.");
         }
         await this.initConnection();
         this.connection.invoke(...this.connectionRequestData.get())
             .then(this.initGameData)
-            .catch(this.disconnectOnFailedGameJoin);
+            .catch(this.disconnectAndBackToList);
       },
       startGame(){
         if(this.gameData?.roomCode == null){
           throw Error("Cannot start game with null gameData");
         }
-        this.connection.invoke(
-          'ReceiveUpdate', 
-          this.gameData.roomCode,
-          'GameStarted',
-          {value: true},
-        );
+        try{
+            this.connection.invoke(
+            'ReceiveUpdate', 
+            this.gameData.roomCode,
+            'GameStarted',
+            {value: true},
+          );
+        }catch(err){
+          console.log(err);
+        }
       },
     },
     async mounted() {

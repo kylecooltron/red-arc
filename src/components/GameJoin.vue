@@ -60,7 +60,7 @@ export default {
                     roomCode: this.roomCode,
                 }
             );
-            this.$router.push(`/red-arc/waiting-room`);
+            this.$router.push(`/waiting-room`);
         },
         playerInfoKeyUp(){
             const codeInput = document.querySelector("#codeInput");

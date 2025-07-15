@@ -29,11 +29,13 @@
     <div id="game-options-details-box" class="nice-box">
         <div class="heading">Difficulty</div>
         <select v-if="gameData?.player.isHost" v-model="difficulty" @change="handleChangeDifficulty" class="nice-input">
+            <option value="Beginner">Beginner</option>
             <option value="Easy">Easy</option>
             <option value="Medium">Medium</option>
             <option value="Hard">Hard</option>
         </select>
         <select :value="gameData?.difficulty" v-else class="nice-input" disabled>
+            <option value="Beginner">Beginner</option>
             <option value="Easy">Easy</option>
             <option value="Medium">Medium</option>
             <option value="Hard">Hard</option>

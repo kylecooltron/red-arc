@@ -17,7 +17,7 @@ import GameInfo from '@/components/GameInfo.vue';
 import GameJoin from '@/components/GameJoin.vue';
 import GameListLink from '@/components/GameListLink.vue';
 import GameOptionBar from '@/components/GameOptionBar.vue';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
     components: { GameListLink, GameInfo, GameOptionBar, GameCreate, GameJoin },
@@ -27,9 +27,10 @@ export default {
       };
     },
     computed: {
-      ...mapGetters(['gameName']),
+      ...mapGetters(['gameName', 'connection']),
     },
     methods: {
+        ...mapActions(['disconnectOnFailedGameJoin']),
         createGameClicked(){
             this.optionsState = "creating";
         },
@@ -41,8 +42,10 @@ export default {
         },
     },
     mounted(){
-        if(this.gameName == null){
-            this.$router.push('/red-arc/game-list');
+        if(this.gameName == null || this.connection != null){
+            this.$router.push('/game-list');
+            this.disconnectOnFailedGameJoin();
+            return;
         }
     },
 }

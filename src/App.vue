@@ -2,7 +2,7 @@
   <div id="app">
     
     <nav>
-      <div class="main-title"><router-link to="/red-arc">🚨 Red Arc</router-link></div>
+      <div class="main-title"><router-link to="/">🚨 Red Arc</router-link></div>
     </nav>
 
     <div id="main-body">

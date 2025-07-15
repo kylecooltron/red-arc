@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
     data() {
@@ -23,8 +23,8 @@ export default {
                     enabled: true,
                 },
                 {
-                    name: "Test Game 1",
-                    enabled: false,
+                    name: "Madlib Game",
+                    enabled: true,
                 },
                 {
                     name: "Test Game 2",
@@ -41,12 +41,22 @@ export default {
             ],
         };
     },
+    computed: {
+        ...mapGetters(['connection']),
+    },
     methods: {
-        ...mapActions(['setGameName']),
+        ...mapActions(['setGameName', 'disconnectOnFailedGameJoin']),
         gameClicked(gameName){
             this.setGameName(gameName);
-            this.$router.push(`/red-arc/game-details`);
+            this.$router.push(`/game-details`);
         }
-    }
+    },
+    mounted(){
+         if(this.connection != null){
+            this.$router.push('/game-list');
+            this.disconnectOnFailedGameJoin();
+            return;
+        }
+    },
 }
 </script>
